@@ -10,7 +10,7 @@ services:
     ports:
       - "3306:3306"
   hive-metastore:
-    image: apk8s-hive:3.2.1
+    image: apk8s-hive-s3m:3.1.2
     environment:
       MYSQL_ENDPOINT: "mysql:3306"
       MYSQL_USER: "root"

@@ -19,12 +19,7 @@ tar -xzvf ./src/hadoop-3.1.2.tar.gz -C ./src
 ./deps.sh
 
 # create container
-docker build -t apk8s-hive:3.2.1 .
-
-# create hive configuration
-cp sample-hive-site.xml hive-site.xml
-
-# edit hive-site.xml
+docker build -t apk8s-hive-s3m:3.1.2 .
 
 # local test (remote S3)
 docker-compose up
@@ -46,6 +41,6 @@ tblproperties ("skip.header.line.count"="1");
 
 Add container to registry:
 ```shell script
-docker tag apk8s-hive:3.2.1 apk8s/hive:3.2.1
-docker push apk8s/hive:3.2.1
+docker tag apk8s-hive-s3m:3.1.2 apk8s/hive-s3m:3.1.2-1.0.0
+docker push apk8s/hive-s3m:3.1.2-1.0.0
 ```
