@@ -50,7 +50,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hive
-  namespace: revnet-demo
+  namespace: data
   labels:
     app: hive
 spec:
