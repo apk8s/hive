@@ -44,3 +44,55 @@ Add container to registry:
 docker tag apk8s-hive-s3m:3.1.2 apk8s/hive-s3m:3.1.2-1.0.0
 docker push apk8s/hive-s3m:3.1.2-1.0.0
 ```
+Kubernetes Config:
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hive
+  namespace: revnet-demo
+  labels:
+    app: hive
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: hive
+  template:
+    metadata:
+      labels:
+        app: hive
+    spec:
+      containers:
+        - name: hive
+          image: apk8s/hive-s3m:3.1.2-1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MYSQL_ENDPOINT
+              value: mysql-mysql:3306
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: ROOT_PASSWORD
+            - name: S3A_ENDPOINT
+              value: "http://minio:9000"
+            - name: S3A_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-access-keys
+                  key: username
+            - name: S3A_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-access-keys
+                  key: password
+          ports:
+            - name: tcp-thrift-meta
+              containerPort: 9083
+            - name: tcp-thrift
+              containerPort: 10000
+```
